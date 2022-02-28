@@ -2,6 +2,7 @@
 blib2to3 Node/Leaf transformation-related utility functions.
 """
 
+import re
 import sys
 from typing import (
     Generic,
@@ -774,7 +775,14 @@ def is_type_comment(leaf: Leaf, suffix: str = "") -> bool:
     Only returns true for type comments for now."""
     t = leaf.type
     v = leaf.value
-    return t in {token.COMMENT, STANDALONE_COMMENT} and v.startswith("# type:" + suffix)
+
+    pattern = re.compile(r"\#[ \t]*(type)[ \t]*\:")
+    v = pattern.sub("# type:", v, 1)
+    leaf.value = v
+
+    return t in {token.COMMENT, STANDALONE_COMMENT} and v.startswith(
+        "# type: " + suffix
+    )
 
 
 def wrap_in_parentheses(parent: Node, child: LN, *, visible: bool = True) -> None:

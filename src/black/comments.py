@@ -12,7 +12,7 @@ else:
 from blib2to3.pytree import Node, Leaf
 from blib2to3.pgen2 import token
 
-from black.nodes import first_leaf_column, preceding_leaf, container_of
+from black.nodes import first_leaf_column, is_type_comment, preceding_leaf, container_of
 from black.nodes import STANDALONE_COMMENT, WHITESPACE
 
 # types
@@ -271,7 +271,9 @@ def contains_pragma_comment(comment_list: List[Leaf]) -> bool:
         pylint).
     """
     for comment in comment_list:
-        if comment.value.startswith(("# type:", "# noqa", "# pylint:")):
+        if comment.value.startswith(("# noqa", "# pylint:")) or is_type_comment(
+            comment
+        ):
             return True
 
     return False

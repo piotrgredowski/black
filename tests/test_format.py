@@ -264,3 +264,8 @@ def test_power_op_newline() -> None:
     # requires line_length=0
     source, expected = read_data("power_op_newline")
     assert_format(source, expected, mode=black.Mode(line_length=0))
+
+
+def test_type_comments() -> None:
+    source, expected = read_data("type_comments")
+    assert_format(source, expected)
